@@ -749,9 +749,8 @@ void FPDP::WriteFloatResults(string name, double computation_time, FloatResult s
     ofs.close();
 }
 
-void FPDP::WriteScaleResults(string name, double computation_time, ScaleResult sr){
+void FPDP::WriteScaleResults(string file_path,double computation_time, ScaleResult sr){
     ofstream ofs;
-    string file_path = "../result/scale_analysis/scale_longint/r_"+name;
     ofs.open(file_path.c_str(),ios::out | ios::trunc);
     ofs<<"computation_time: "<<computation_time<<"\t"<<"total_benefit: "<<sr.cp.profit<<endl;
     ofs<<endl<<"include items:"<<endl;
@@ -1271,43 +1270,51 @@ void FPDP::TransformScaleToInterval(){
 
 int FPDP::DPScalingMethod(Instance instance, ScaleResult sr){
     //initialize the sets
-    spsp_prev= InitialScalePatternStatePool(instance);
-    scale_length_list_prev= InitialScalePatternLengthList(instance);
-    // unfinished_index_set_prev.push_back(0);
-    //initialize the sets for the next stage
-    spsp_next = spsp_prev;
-    scale_length_list_next=scale_length_list_prev;
-    int aaa = spsp_next.cp_set.size();
+    try {
+        spsp_prev = InitialScalePatternStatePool(instance);
+        scale_length_list_prev = InitialScalePatternLengthList(instance);
+        // unfinished_index_set_prev.push_back(0);
+        //initialize the sets for the next stage
+        spsp_next = spsp_prev;
+        scale_length_list_next = scale_length_list_prev;
+        int aaa = spsp_next.cp_set.size();
 
-    auto start_time = std::chrono::system_clock::now();
+        auto start_time = std::chrono::system_clock::now();
 
-    //unfinished_index_set_next=unfinished_index_set_prev;
-    //try item types one by one
-    for(int j=0;j<instance.items_number;j++){
-        //generate new states based on existing states
-        aaa = scale_length_list_prev.size();
-        for(unsigned int b =0;b<scale_length_list_prev.size()-1;b++){
-            //try possible numbers pf used items
-            int he = 0;
-            for(int a=1;a<=instance.item_set[j].demand;a++){
-                INT_TYPE new_intLength = scale_length_list_prev[b]+a*instance.item_set[j].scale_length;
-                if(new_intLength>instance.scale_stock_length){
-                    break;
+        //unfinished_index_set_next=unfinished_index_set_prev;
+        //try item types one by one
+        for (int j = 0; j < instance.items_number; j++) {
+            //generate new states based on existing states
+            aaa = scale_length_list_prev.size();
+            for (unsigned int b = 0; b < scale_length_list_prev.size() - 1; b++) {
+                //try possible numbers pf used items
+                int he = 0;
+                for (int a = 1; a <= instance.item_set[j].demand; a++) {
+                    cout<<j<<" | " <<instance.items_number<<", "<< b << " | "<<aaa<<", "<< a <<endl;
+                    INT_TYPE new_intLength = scale_length_list_prev[b] + a * instance.item_set[j].scale_length;
+                    if (new_intLength > instance.scale_stock_length) {
+                        break;
+                    }
+                    INT_TYPE new_intProfit = spsp_prev.profit_set[b] + a * instance.item_set[j].scale_profit;
+                    UpdateScalePatternState(instance, {j, a}, b, new_intLength, new_intProfit);
+
                 }
-                INT_TYPE new_intProfit = spsp_prev.profit_set[b] + a*instance.item_set[j].scale_profit;
-                UpdateScalePatternState(instance,{j,a},b,new_intLength,new_intProfit);
-
             }
+            spsp_prev = spsp_next;
+            scale_length_list_prev = scale_length_list_next;
+            // unfinished_index_set_prev=unfinished_index_set_next;
         }
-        spsp_prev = spsp_next;
-        scale_length_list_prev=scale_length_list_next;
-        // unfinished_index_set_prev=unfinished_index_set_next;
-    }
-    auto end_time = std::chrono::system_clock::now();
+        auto end_time = std::chrono::system_clock::now();
 
-    std::chrono::duration<double> computation_time = end_time-start_time;
-    sr = GetMaximalScalePattern();
-    WriteScaleResults(instance.instance_name,computation_time.count(),sr);
+
+        std::chrono::duration<double> computation_time = end_time-start_time;
+        sr = GetMaximalScalePattern();
+        string folder_path = "../result/dataset1/"+instance.instance_name+".txt";
+        WriteScaleResults(instance.instance_name,computation_time.count(),sr);
+    }
+    catch (const std::exception &exc){
+        std::cerr<<exc.what();
+    }
     if(sr.cp.ip_list.size()==0){
         return 0;
     }
@@ -1327,7 +1334,6 @@ int FPDP::DPnumerExactMethod(Instance instance, ScaleResult sr, Result result){
     int aaa = spsp_next.cp_set.size();
 
 
-    bool call_interval = false;
     //unfinished_index_set_next=unfinished_index_set_prev;
     //try item types one by one
     for(int j=0;j<instance.items_number;j++){
@@ -1348,43 +1354,10 @@ int FPDP::DPnumerExactMethod(Instance instance, ScaleResult sr, Result result){
                     overflow_list.push_back({scale_length_list_prev[b],j,a});
                     break;
                 }
-//                if(LONG_MAX - added_length>scale_length_list_prev[b] && call_interval == false){
-//                    INT_TYPE new_intLength = scale_length_list_prev[b]+a*instance.item_set[j].scale_length;
-//                    if(new_intLength>instance.scale_stock_length){
-//                        break;
-//                    }
-//                    INT_TYPE new_intProfit = spsp_prev.profit_set[b] + a*instance.item_set[j].scale_profit;
-//                    UpdateScalePatternState(instance,{j,a},b,new_intLength,new_intProfit);
-//                }
-//                else if(LONG_MAX - added_length>scale_length_list_prev[b] && call_interval == true){
-//                    INT_TYPE new_intLength = scale_length_list_prev[b]+a*instance.item_set[j].scale_length;
-//                    if(new_intLength>instance.scale_stock_length){
-//                        break;
-//                    }
-//                    INT_TYPE new_intProfit = spsp_prev.profit_set[b] + a*instance.item_set[j].scale_profit;
-//                    FPinterval new_fpiLength;
-//                    FPinterval new_fpiProfit;
-//                    fesetround(FE_DOWNWARD);
-//                    new_fpiLength.lb=new_intLength/pow(10,instance.digit);
-//                    new_fpiProfit.lb = new_intProfit/pow(10,instance.digit);
-//                    fesetround(FE_UPWARD);
-//                    new_fpiLength.ub = new_intLength/pow(10,instance.digit);
-//                    new_fpiProfit.ub=new_intProfit/pow(10,instance.digit);
-//                    fesetround(FE_TONEAREST);
-//                    UpdateNEPatternState(instance,{j,a},b,new_intLength,new_intProfit,new_fpiLength,new_fpiProfit);
-//                }
-//                else if(LONG_MAX - added_length<scale_length_list_prev[b] && call_interval == false){
-//
-//                }
-//                else{
-//
-//                }
-
             }
         }
         spsp_prev = spsp_next;
         scale_length_list_prev=scale_length_list_next;
-        // unfinished_index_set_prev=unfinished_index_set_next;
     }
 
     psp_prev= InitialPatternStatePool(instance);
@@ -1460,7 +1433,7 @@ int FPDP::DPnumerExactMethod(Instance instance, ScaleResult sr, Result result){
     auto end_time = std::chrono::system_clock::now();
 
     std::chrono::duration<double> computation_time = end_time-start_time;
-    int  flag = GetMaximalNumerExactPattern(sr,result);
+    int  flag = GetMaximalNumerExactPattern(instance.digit,sr,result);
     WriteNumerExactResults(instance.instance_name,computation_time.count(),sr,result,flag);
     if(sr.cp.ip_list.size()==0){
         return 0;
@@ -1792,13 +1765,7 @@ int FPDP::DPepsilonMethod(Instance instance, FloatResult fr){
 
 
 
-int FPDP::DP(Instance instance, Result result){
-//    vector<FPinterval> global_fp_intervals;
-//    for(int i=0;i<instance.items_number;i++){
-//        global_fp_intervals.push_back(instance.item_set[i].length_interval);
-//        global_fp_intervals.push_back(instance.item_set[i].profit_interval);
-//    }
-//    global_fp_intervals.push_back(instance.stock_length_interval);
+int FPDP::DP(Instance instance){
     GetMaxDecimalDigit(instance);
     GetFPdecimalDigit(instance);
 //    FloatResult fr;
@@ -1810,59 +1777,15 @@ int FPDP::DP(Instance instance, Result result){
 //    GMPscaleResult sr;
 //    Instance scale_instance = GMPscaleData(instance,max_scale_factor);
 //    DPgmpScalingMethod(scale_instance,sr);
-    ScaleResult sr;
-    Instance scale_instance = ScaleData(instance,max_scale_factor);
-    DPScalingMethod(scale_instance,sr);
 //    ScaleResult sr;
 //    Instance scale_instance = ScaleData(instance,max_scale_factor);
-//    DPnumerExactMethod(scale_instance,instance,sr,result);
-    //first, check if we can only use the scaling way
-//    dp_flag = GlobalCheckScaleAssumption(instance,max_scale_factor);
-//    //dp_flag == -1 represents that we can not use the scaling way; dp_flag == 1 represents that we can solve the problem just by the scaling way;
-//    //dp_flag == 2 represents that we can use the scaling way, but when we reach a certain a stage of dp, we must switch the scaling way to interval way
-//    //or rational number way.
-//    if(dp_flag==1){
-//        //use scaling way
-//        ScaleResult sr;
-//        Instance scale_instance = ScaleData(instance,max_scale_factor);
-//        DPScalingMethod(instance,sr);
-//    }
-//    else if(dp_flag==2){
-//        dp_flag = GlobalCheckIntervalAssumption(instance);
-//        if(dp_flag==3){
-//            //first use scaling way, then use interval way
-//            Instance scale_instance = ScaleData(instance,max_scale_factor);
-//            ScaleResult sr;
-//            int dp_scale_flag = DPScalingMethod(scale_instance,sr);
-//            if(dp_scale_flag == 2){
-//                DPintervalMehod2(instance,result);
-//            }
-//        }
-//        else if(dp_flag==4){
-//            //first use scaling way, then use interval way, finally use rantional number way
-//            Instance scale_instance = ScaleData(instance,max_scale_factor);
-//            ScaleResult sr;
-//            int dp_scale_flag = DPScalingMethod(scale_instance,sr);
-//            if(dp_scale_flag == 2){
-//                DPintervalMehod2(instance,result);
-//            }
-//        }
-//        else{
-//            //use rational number way
-//        }
-//    }
-//    else{
-//        dp_flag = GlobalCheckIntervalAssumption(instance);
-//        if(dp_flag==3){
-//            //use interval way
-//        }
-//        else if(dp_flag==4){
-//            //first use interval way, then use rantional number way
-//        }
-//        else{
-//            //use rational number way
-//        }
-    //   }
+//    DPScalingMethod(scale_instance,sr);
+
+    ScaleResult sr;
+    Result result;
+    Instance scale_instance = ScaleData(instance,max_scale_factor);
+    DPnumerExactMethod(scale_instance,sr, result);
+    int cc=0;
 
     return 1;
 }

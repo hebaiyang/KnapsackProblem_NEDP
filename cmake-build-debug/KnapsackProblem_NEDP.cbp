@@ -100,5 +100,8 @@
 		<Unit filename="/home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
+		<Unit filename="/home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/FindGMP.cmake">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
 	</Project>
 </CodeBlocks_project_file>

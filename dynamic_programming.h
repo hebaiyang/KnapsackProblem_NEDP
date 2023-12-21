@@ -397,7 +397,7 @@ public:
     Instance ScaleData(Instance instance, int scale_factor);
     void UpdateScalePatternState(Instance instance, ItemPattern ip, int prev_iter, INT_TYPE new_intLength, INT_TYPE new_intProfit);
     bool CheckFinishedScalePattern(Instance instance, INT_TYPE length);
-    void WriteScaleResults(string name, double computation_time, ScaleResult sr);
+    void WriteScaleResults(string file_path, double computation_time, ScaleResult sr);
     int DPrationalMethod2(Instance instance, RResult rr);
 
         RPatternStatePool InitialRationalPatternStatePool(Instance instance);
@@ -437,7 +437,7 @@ public:
     void UpdateNEpatternState(Instance instance, ItemPattern ip, int prev_iter, INT_TYPE new_intLength, INT_TYPE new_intProfit,
                                     FPinterval new_fpiLength, FPinterval new_fpiProfit);
     void WriteNumerExactResults(string name, double computation_time, ScaleResult sr, Result result, int flag);
-    int GetMaximalNumerExactPattern(ScaleResult& sr, Result& result);
+    int GetMaximalNumerExactPattern(int digit, ScaleResult& sr, Result& result);
 
 
         int DPfloatingMethod(Instance instance, FloatResult sr);
@@ -447,7 +447,7 @@ public:
     int DPScalingMethod(Instance instance, ScaleResult sr);
     int DPnumerExactMethod(Instance instance,ScaleResult sr, Result result);
     int DPepsilonMethod(Instance, FloatResult fr);
-    int DP(Instance instance, Result result);
+    int DP(Instance instance);
 
 };
 #endif //KNAPSACKPROBLEM_NEDP_DYNAMIC_PROGRAMMING_H

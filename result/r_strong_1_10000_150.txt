@@ -1,0 +1,6 @@
+computation_time: 28.1076	total_benefit: 1602082
+
+include items:
+-1_-1
+124_1
+125_1

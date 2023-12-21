@@ -44,10 +44,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/clion/259/bin/cmake/linux/x64/bin/cmake
+CMAKE_COMMAND = /snap/clion/260/bin/cmake/linux/x64/bin/cmake
 
 # The command to remove a file.
-RM = /snap/clion/259/bin/cmake/linux/x64/bin/cmake -E rm -f
+RM = /snap/clion/260/bin/cmake/linux/x64/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -69,24 +69,10 @@ include CMakeFiles/KnapsackProblem_NEDP.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/KnapsackProblem_NEDP.dir/flags.make
 
-CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o: CMakeFiles/KnapsackProblem_NEDP.dir/flags.make
-CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o: /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/main.cpp
-CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o: CMakeFiles/KnapsackProblem_NEDP.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o"
-	/usr/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o -MF CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o.d -o CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o -c /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/main.cpp
-
-CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.i"
-	/usr/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/main.cpp > CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.i
-
-CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.s"
-	/usr/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/main.cpp -o CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.s
-
 CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.o: CMakeFiles/KnapsackProblem_NEDP.dir/flags.make
 CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.o: /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/dynamic_programming.cpp
 CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.o: CMakeFiles/KnapsackProblem_NEDP.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.o"
 	/usr/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.o -MF CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.o.d -o CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.o -c /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/dynamic_programming.cpp
 
 CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.i: cmake_force
@@ -96,6 +82,20 @@ CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.i: cmake_force
 CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.s"
 	/usr/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/dynamic_programming.cpp -o CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.s
+
+CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o: CMakeFiles/KnapsackProblem_NEDP.dir/flags.make
+CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o: /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/main.cpp
+CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o: CMakeFiles/KnapsackProblem_NEDP.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o"
+	/usr/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o -MF CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o.d -o CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o -c /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/main.cpp
+
+CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.i"
+	/usr/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/main.cpp > CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.i
+
+CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.s"
+	/usr/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/main.cpp -o CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.s
 
 CMakeFiles/KnapsackProblem_NEDP.dir/read_problem.cpp.o: CMakeFiles/KnapsackProblem_NEDP.dir/flags.make
 CMakeFiles/KnapsackProblem_NEDP.dir/read_problem.cpp.o: /home/baiyanghe/MyProgram/code/KnapsackProblem_NEDP/read_problem.cpp
@@ -113,15 +113,15 @@ CMakeFiles/KnapsackProblem_NEDP.dir/read_problem.cpp.s: cmake_force
 
 # Object files for target KnapsackProblem_NEDP
 KnapsackProblem_NEDP_OBJECTS = \
-"CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o" \
 "CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.o" \
+"CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o" \
 "CMakeFiles/KnapsackProblem_NEDP.dir/read_problem.cpp.o"
 
 # External object files for target KnapsackProblem_NEDP
 KnapsackProblem_NEDP_EXTERNAL_OBJECTS =
 
-KnapsackProblem_NEDP: CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o
 KnapsackProblem_NEDP: CMakeFiles/KnapsackProblem_NEDP.dir/dynamic_programming.cpp.o
+KnapsackProblem_NEDP: CMakeFiles/KnapsackProblem_NEDP.dir/main.cpp.o
 KnapsackProblem_NEDP: CMakeFiles/KnapsackProblem_NEDP.dir/read_problem.cpp.o
 KnapsackProblem_NEDP: CMakeFiles/KnapsackProblem_NEDP.dir/build.make
 KnapsackProblem_NEDP: CMakeFiles/KnapsackProblem_NEDP.dir/link.txt
