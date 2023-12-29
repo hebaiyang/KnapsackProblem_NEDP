@@ -313,6 +313,21 @@ void FPDP::AddFloatPatternState(Instance instance, ItemPattern ip, int prev_iter
 
 }
 
+void FPDP::AddNEpatternState1(Instance instance, vector<ItemPattern> ip_list, ItemPattern ip,  FPinterval new_fpiLength, FPinterval new_fpiProfit, int updated_location, vector<int> stage){
+    int state_number = psp_next.profit_set.size();
+
+    psp_next.lengthState_map_location.insert(pair<FPinterval,int>(new_fpiLength,state_number));
+
+    psp_next.length_state_set.push_back(new_fpiLength);
+
+    psp_next.profit_set.push_back(new_fpiProfit);
+
+    ip_list.push_back(ip);
+
+    CuttingPattern cp = {0,new_fpiProfit,new_fpiLength,ip_list, stage};
+    psp_next.cp_set.push_back(cp);
+}
+
 void FPDP::AddPatternState(Instance instance, ItemPattern ip, int prev_iter, FPinterval new_fpiLength, FPinterval new_fpiProfit, int updated_location, vector<int> stage){
     int state_number = psp_next.profit_set.size();
 
@@ -330,32 +345,6 @@ void FPDP::AddPatternState(Instance instance, ItemPattern ip, int prev_iter, FPi
 
     CuttingPattern cp = {0,new_fpiProfit,new_fpiLength,ip_list, stage};
     psp_next.cp_set.push_back(cp);
-
-//    LengthState origin_state = {fpiLength_list_next[updated_location-1],fpiLength_list_next[updated_location]};
-//    int state_index = psp_next.lengthState_map_location[origin_state];
-//    int state_number = psp_next.profit_set.size();
-//    FPinterval origin_profit = psp_next.profit_set[state_index];
-//
-//    //remove the previous state and insert two new states
-//    LengthState ls1 = {fpiLength_list_next[updated_location-1],new_fpiLength};
-//    psp_next.lengthState_map_location.erase(origin_state);
-//    psp_next.lengthState_map_location.insert(pair<LengthState,int>(ls1,state_index));
-//    LengthState ls2 = {new_fpiLength,fpiLength_list_next[updated_location]};
-//    psp_next.lengthState_map_location.insert(pair<LengthState,int>(ls2,state_number));
-//
-//    psp_next.length_state_set.erase(psp_next.length_state_set.begin()+state_index);
-//    psp_next.length_state_set.insert(psp_next.length_state_set.begin()+state_index,ls1);
-//    psp_next.length_state_set.push_back(ls2);
-//
-//    psp_next.profit_set.push_back(new_fpiProfit);
-//
-//    LengthState origin_state_prev = {fpiLength_list_prev[prev_iter],fpiLength_list_prev[prev_iter+1]};
-//    int state_index_prev = psp_prev.lengthState_map_location[origin_state_prev];
-//    vector<ItemPattern> ip_list = psp_prev.cp_set[state_index_prev].ip_list;
-//    ip_list.push_back(ip);
-//
-//    CuttingPattern cp = {0,new_fpiProfit,new_fpiLength,ip_list, stage};
-//    psp_next.cp_set.push_back(cp);
 
 }
 
@@ -530,6 +519,22 @@ void FPDP::ReplaceFloatPatternState(Instance instance, ItemPattern ip, int prev_
 
         FloatCuttingPattern cp = {0,new_fpiProfit,fpsp_next.cp_set[state_index].length,ip_list,stage};
         fpsp_next.cp_set[state_index]=cp;
+    }
+
+}
+
+void FPDP::ReplaceNEpatternState1(Instance instance, vector<ItemPattern> ip_list, ItemPattern ip, FPinterval new_fpiProfit, int updated_location, vector<int> stage){
+    FPinterval origin_state = fpiLength_list_next[updated_location];
+    int state_index = psp_next.lengthState_map_location[origin_state];
+    int state_number=psp_next.profit_set.size();
+    FPinterval origin_profit = psp_next.profit_set[state_index];
+
+    if(origin_profit<new_fpiProfit){
+        psp_next.profit_set[state_index] = new_fpiProfit;
+        ip_list.push_back(ip);
+
+        CuttingPattern cp = {0,new_fpiProfit,psp_next.cp_set[state_index].length,ip_list,stage};
+        psp_next.cp_set[state_index]=cp;
     }
 
 }
@@ -1063,7 +1068,22 @@ void FPDP::UpdateFloatPatternState(Instance instance, ItemPattern ip, int prev_i
     }
 }
 
-void FPDP::UpdatePatternState(Instance instance, ItemPattern ip, int prev_iter, FPinterval new_fpiLength, FPinterval new_fpiProfit){
+int FPDP::UpdateNEpatternState1(Instance instance,vector<ItemPattern> ip_list, ItemPattern ip, FPinterval new_fpiLength, FPinterval new_fpiProfit){
+    string quried_result_next = QueryLengthFPi(new_fpiLength,fpiLength_list_next);
+    int updated_location=-1;
+    bool insert= ParseQuerInfo(quried_result_next,updated_location);
+    if(insert == true){
+        AddNEpatternState1(instance, ip_list, ip, new_fpiLength, new_fpiProfit, updated_location, {ip.included_item+1,ip.included_item_number});
+        fpiLength_list_next.push_back(new_fpiLength);
+    }
+    else{
+        ReplaceNEpatternState1(instance, ip_list,ip, new_fpiProfit,updated_location,{ip.included_item+1,ip.included_item_number});
+    }
+
+    return insert;
+}
+
+int FPDP::UpdatePatternState(Instance instance, ItemPattern ip, int prev_iter, FPinterval new_fpiLength, FPinterval new_fpiProfit){
     string quried_result_next = QueryLengthFPi(new_fpiLength,fpiLength_list_next);
     int updated_location=-1;
     bool insert= ParseQuerInfo(quried_result_next,updated_location);
@@ -1074,15 +1094,8 @@ void FPDP::UpdatePatternState(Instance instance, ItemPattern ip, int prev_iter, 
     else{
         ReplacePatternState(instance, ip, prev_iter, new_fpiProfit,updated_location,{ip.included_item+1,ip.included_item_number});
     }
-//    int updated_location=-1;
-//    bool insert= ParseQuerInfo(quried_result_next,updated_location);
-//    if(insert==true){
-//        //AddPatternState(instance,ip, prev_iter, new_fpiLength, new_fpiProfit, updated_location, {ip.included_item+1,ip.included_item_number});
-//        fpiLength_list_next.insert(fpiLength_list_next.begin()+updated_location,new_fpiLength);
-//    }
-//    else{
-//        //ReplacePatternState(instance, ip, prev_iter, new_fpiProfit,updated_location,{ip.included_item+1,ip.included_item_number});
-//    }
+
+    return insert;
 }
 
 void FPDP::UpdateScalePatternState(Instance instance, ItemPattern ip, int prev_iter, INT_TYPE new_intLength, INT_TYPE new_intProfit){
@@ -1321,6 +1334,14 @@ int FPDP::DPScalingMethod(Instance instance, ScaleResult sr){
     return 1;
 }
 
+vector<ItemPattern> FPDP::GetScaleIpListNE(INT_TYPE target_length){
+    int index = find(scale_length_list_next.begin(),scale_length_list_next.end(),target_length)-scale_length_list_next.begin();
+    ScaleLengthState origin_state = {scale_length_list_next[index],scale_length_list_next[index+1]};
+    int state_index = spsp_next.lengthState_map_location[origin_state];
+    vector<ItemPattern> ip_list = spsp_next.cp_set[state_index].ip_list;
+    return ip_list;
+}
+
 int FPDP::DPnumerExactMethod(Instance instance, ScaleResult sr, Result result){
     auto start_time = std::chrono::system_clock::now();
     vector<vector<long int>> overflow_list;
@@ -1365,7 +1386,9 @@ int FPDP::DPnumerExactMethod(Instance instance, ScaleResult sr, Result result){
     psp_next = psp_prev;
     fpiLength_list_next=fpiLength_list_prev;
     for(unsigned int i=0;i<overflow_list.size();i++){
+        vector<int> new_location_list;
         INT_TYPE intLength_temp =overflow_list[i][0];
+        vector<ItemPattern> ip_list = GetScaleIpListNE(intLength_temp);
         FPinterval fpiLength_temp;
         fesetround(FE_DOWNWARD);
         fpiLength_temp.lb=intLength_temp/pow(10,instance.digit);
@@ -1399,12 +1422,16 @@ int FPDP::DPnumerExactMethod(Instance instance, ScaleResult sr, Result result){
             fesetround(FE_UPWARD);
             new_fpiProfit.ub=intProfit_temp/pow(10,instance.digit) + a*instance.item_set[overflow_list[i][1]].profit_interval.ub;
             fesetround(FE_TONEAREST);
-            UpdatePatternState(instance, {j,a}, 0, new_fpiLength, new_fpiProfit);
-
+            int update_flag = UpdateNEpatternState1(instance, ip_list,{j,a}, new_fpiLength, new_fpiProfit);
+            if(update_flag == 1){
+                new_location_list.push_back(fpiLength_list_next.size()-1);
+            }
         }
-
+        psp_prev = psp_next;
+        fpiLength_list_prev=fpiLength_list_next;
         for(int k=j+1;j<instance.items_number;j++){
-            for(unsigned int b =1;b<fpiLength_list_prev.size();b++){
+            for(unsigned int c =0;c<new_location_list.size();c++){
+                int b = new_location_list[c];
                 //try possible numbers pf used items
                 for(int a=1;a<=instance.item_set[k].demand;a++){
                     FPinterval new_fpiLength;

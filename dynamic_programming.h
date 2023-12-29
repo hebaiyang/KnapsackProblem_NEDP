@@ -384,7 +384,7 @@ public:
     void TransformScaleToInterval();
     void AddPatternState(Instance instance, ItemPattern ip, int prev_iter, FPinterval new_fpiLength,FPinterval new_fpiProfit, int updated_location, vector<int> stage);
     void ReplacePatternState(Instance instance, ItemPattern ip, int prev_iter, FPinterval new_fpiProfit, int updated_location, vector<int> stage);
-    void UpdatePatternState(Instance instance, ItemPattern ip, int prev_iter, FPinterval new_fpiLength, FPinterval new_fpiProfit);
+    int UpdatePatternState(Instance instance, ItemPattern ip, int prev_iter, FPinterval new_fpiLength, FPinterval new_fpiProfit);
     Result GetMaximalPattern();
     void WriteIntervalResults(string name, double computation_time, Result result);
 
@@ -438,6 +438,12 @@ public:
                                     FPinterval new_fpiLength, FPinterval new_fpiProfit);
     void WriteNumerExactResults(string name, double computation_time, ScaleResult sr, Result result, int flag);
     int GetMaximalNumerExactPattern(int digit, ScaleResult& sr, Result& result);
+    void AddNEpatternState1(Instance instance, vector<ItemPattern> ip_list, ItemPattern ip,
+                                 FPinterval new_fpiLength, FPinterval new_fpiProfit, int updated_location, vector<int> stage);
+    vector<ItemPattern> GetScaleIpListNE(INT_TYPE target_length);
+    int UpdateNEpatternState1(Instance instance,vector<ItemPattern> ip_list, ItemPattern ip, FPinterval new_fpiLength, FPinterval new_fpiProfit);
+    void ReplaceNEpatternState1(Instance instance, vector<ItemPattern> ip_list, ItemPattern ip, FPinterval new_fpiProfit,
+                                int updated_location, vector<int> stage);
 
 
         int DPfloatingMethod(Instance instance, FloatResult sr);
