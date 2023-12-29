@@ -1450,6 +1450,7 @@ int FPDP::DPnumerExactMethod(Instance instance, ScaleResult sr, Result result){
                     new_fpiProfit.ub=psp_prev.profit_set[b].ub+a*instance.item_set[k].profit_interval.ub;
                     fesetround(FE_TONEAREST);
                     UpdatePatternState(instance, {k,a}, b, new_fpiLength, new_fpiProfit);
+                    
                 }
             }
             psp_prev = psp_next;
